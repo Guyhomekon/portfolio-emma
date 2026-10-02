@@ -27,6 +27,11 @@ function setupMenu() {
     const open = button.getAttribute('aria-expanded') !== 'true';
     button.setAttribute('aria-expanded', String(open)); nav.classList.toggle('open', open);
   }, { signal: controller.signal });
+  document.addEventListener('pointerdown', event => {
+    if (button.getAttribute('aria-expanded') !== 'true') return;
+    const path = event.composedPath();
+    if (!path.includes(button) && !path.includes(nav)) close();
+  }, { signal: controller.signal });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') { close(); button.focus(); }
   }, { signal: controller.signal });

@@ -1,7 +1,0 @@
----
-import Visual from './Visual.astro';
-import type { CollectionEntry } from 'astro:content';
-interface Props { project: CollectionEntry<'projects'>; compact?: boolean; }
-const { project, compact = false } = Astro.props; const p = project.data;
----
-<article class:list={['project-preview', {compact}]}><a href={`/projets/${project.id}/`} class="project-image"><Visual file={p.heroImage} alt={`${p.title} — ${p.shortDescription}`} transitionName={`project-${project.id}`} sizes={compact ? '(max-width: 700px) 90vw, 44vw' : '(max-width: 700px) 90vw, 65vw'}/><span class="image-action">DÉCOUVRIR LE PROJET <span>↗</span></span></a><div class="project-caption"><span class="project-number">{p.number}</span><div><h3><a href={`/projets/${project.id}/`}>{p.title}</a></h3><p>{p.shortDescription}</p></div><span class="eyebrow">{p.type}<br/>{p.location}</span><a class="project-arrow" href={`/projets/${project.id}/`} aria-label={`Découvrir ${p.title}`}>↗</a></div></article>

@@ -17,6 +17,54 @@ const path = pathFor(Astro.url);
   </div>
 </footer>
 <script is:inline src="https://embed.rtge.fr/badge/v1/rtge-badge.min.js" defer></script>
+<script>
+  // The official component exposes an open shadow root, without CSS parts.
+  // Append the portfolio theme after its own styles, once per badge instance.
+  async function styleRootageBadge() {
+    const badge = document.querySelector<HTMLElement>('footer rootage-badge');
+    if (!badge) return;
+    await customElements.whenDefined('rootage-badge');
+    const root = badge.shadowRoot;
+    if (!badge.isConnected || !root || root.querySelector('[data-portfolio-badge]')) return;
+    const style = document.createElement('style');
+    style.dataset.portfolioBadge = '';
+    style.textContent = `
+      a {
+        gap: 12px;
+        padding: 10px 16px;
+        background: var(--color-bg, #faf9f6);
+        color: var(--color-muted, #706c68);
+        border: 1px solid var(--color-border, #d8d5ce);
+        border-radius: 0;
+        box-shadow: none;
+        font-family: var(--sans, 'DM Sans', Arial, sans-serif);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: .12em;
+        line-height: 1.6;
+        text-transform: uppercase;
+        transition: color 250ms ease, border-color 250ms ease;
+      }
+      a:hover, a:active {
+        color: var(--color-accent, #a85d50);
+        border-color: var(--color-accent, #a85d50);
+        transform: none;
+        box-shadow: none;
+      }
+      a:focus-visible {
+        outline: 2px solid var(--color-accent, #a85d50);
+        outline-offset: 4px;
+        border-radius: 0;
+      }
+      .sep { background: var(--color-border, #d8d5ce); opacity: 1; }
+      .logo img, a:hover .logo img, a:active .logo img { transform: none; }
+      @media (prefers-reduced-motion: reduce) { a { transition: none; } }
+    `;
+    root.append(style);
+  }
+  document.addEventListener('astro:page-load', styleRootageBadge);
+  void styleRootageBadge();
+</script>
 <style>
   .footer { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 24px; }
   .footer-identity, .footer-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }

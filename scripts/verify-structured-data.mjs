@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const origin = 'https://emma-expert.guyhomekon.fr/';
+const home = fs.readFileSync('dist/index.html', 'utf8');
+const origin = new URL(home.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)[1]).origin + '/';
 const english = JSON.parse(fs.readFileSync('src/i18n/en.json', 'utf8'));
 const projects = fs.readdirSync('src/content/projects')
   .filter(file => file.endsWith('.json') && !file.endsWith(' 2.json'))
@@ -11,7 +12,8 @@ const roots = new Map();
 const graphs = new Map();
 let count = 0;
 
-for (const file of fs.readdirSync('dist', { recursive: true }).filter(file => file.endsWith('.html'))) {
+// Validate generated routes, excluding local numbered backup copies of index.html.
+for (const file of fs.readdirSync('dist', { recursive: true }).filter(file => /(^|\/)index\.html$/.test(file) || file === '404.html')) {
   const html = fs.readFileSync(`dist/${file}`, 'utf8');
   const blocks = [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)];
   if (!html.includes('property="og:title"')) continue; // Legacy redirects.

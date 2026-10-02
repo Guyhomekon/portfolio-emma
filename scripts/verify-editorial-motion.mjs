@@ -7,15 +7,15 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 page.on('pageerror', error => errors.push(error.message));
 try {
   await page.goto(base);
-  await page.waitForTimeout(2300);
-  assert.equal(await page.locator('[data-reveal="cover"]').count(), 4);
+  assert.equal(await page.locator('.cover-line > *').count(), 4);
+  assert.equal(await page.locator('[data-reveal]').count(), 0);
+  assert.ok(await page.locator('.cover-line > *, .cover-guides path').evaluateAll(els => els.every(el => getComputedStyle(el).animationName === 'none' && getComputedStyle(el).transform === 'none')));
   assert.ok(await page.locator('.cover-guides path').evaluateAll(paths => paths.every(path => parseFloat(getComputedStyle(path).strokeDashoffset) === 0)));
   await page.screenshot({ path: '/tmp/emma-editorial-cover.png' });
   for (const prefix of ['/projects/', '/fr/projets/']) {
     await page.goto(base + prefix + 'habitat-de-a-a-z/');
     const board = page.locator('[data-depth-board]').first();
     await board.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(1600);
     assert.equal(await board.evaluate(el => el.classList.contains('depth-active')), false);
     const before = await board.locator('.gallery-zoom').evaluate(el => getComputedStyle(el).transform);
     await page.evaluate(() => scrollBy(0, 180));
@@ -32,22 +32,21 @@ try {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => !document.querySelector('.depth-active'));
     assert.equal(await page.locator('.depth-active').count(), 0);
-    assert.ok(await page.locator('[data-reveal]').evaluateAll(els => els.every(el => getComputedStyle(el).opacity === '1' && getComputedStyle(el).clipPath === 'none')));
+    assert.ok(await page.locator('.gallery-section figure').evaluateAll(els => els.every(el => getComputedStyle(el).opacity === '1' && getComputedStyle(el).clipPath === 'none')));
     await page.emulateMedia({ reducedMotion: 'no-preference' });
   }
   await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(await page.locator('.depth-active').count(), 0);
   await page.goto(base);
-  await page.waitForTimeout(1500);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   await page.screenshot({ path: '/tmp/emma-editorial-mobile.png' });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  assert.ok(await page.locator('[data-reveal="cover"]').evaluateAll(els => els.every(el => getComputedStyle(el).transform === 'none')));
+  assert.ok(await page.locator('.cover-line > *').evaluateAll(els => els.every(el => getComputedStyle(el).transform === 'none')));
   assert.deepEqual(errors, []);
   const plain = await browser.newContext({ javaScriptEnabled: false });
   const noJS = await plain.newPage(); await noJS.goto(base);
   assert.equal(await noJS.locator('.cover-line').count(), 4);
   assert.ok(await noJS.locator('.cover-line > *').evaluateAll(els => els.every(el => getComputedStyle(el).opacity === '1')));
   await plain.close();
-  console.log('PASS: composed cover, drawn SVG guides, masked boards, flat technical boards in EN/FR, flat lightbox, mobile, reduced motion and no-JS.');
+  console.log('PASS: static cover, fixed SVG guides, immediately visible boards, flat technical boards in EN/FR, flat lightbox, mobile, reduced motion and no-JS.');
 } finally { await browser.close(); }

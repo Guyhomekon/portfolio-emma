@@ -29,8 +29,8 @@ try {
   assert.equal(await page.locator('html').getAttribute('lang'), 'en');
   assert.equal(await page.locator('#main-nav a').first().textContent(), 'Projects');
   await verifyIcons();
-  for (const slug of await readdir('dist/projects')) {
-    if (slug === 'index.html') continue;
+  const slugs = (await readdir('src/content/projects')).filter(file => file.endsWith('.json') && !file.endsWith(' 2.json')).map(file => file.slice(0, -5));
+  for (const slug of slugs) {
     for (const locale of ['en', 'fr']) {
       const url = locale === 'en' ? `/projects/${slug}/` : `/fr/projets/${slug}/`;
       const response = await page.goto(base + url);

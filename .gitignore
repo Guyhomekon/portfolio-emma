@@ -1,6 +1,38 @@
+# Dependencies, generated site and caches
 node_modules/
 dist/
 .astro/
+.cache/
+.wrangler/
+
+# Local environment variables (keep configuration templates)
 .env
+.env.*
+!.env.example
+!.env.*.example
+
+# Test artifacts
 playwright-report/
 test-results/
+coverage/
+
+# Automatically numbered copies, such as README 2.md or .gitignore 2
+* [2-9].*
+* [2-9]
+
+# Operating system and editor artifacts
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs, temporary files and Python caches
+*.log
+*.tmp
+*.bak
+__pycache__/
+*.py[cod]
