@@ -1,0 +1,33 @@
+.inline-icon {
+  display: inline-block;
+  width: var(--icon-size, 18px);
+  height: var(--icon-size, 18px);
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+.header nav a > span, .image-action > span,
+.next-project > span:last-child, .contact-details a > span:last-child {
+  display: inline-flex;
+  align-items: center;
+}
+.hero-image-caption > span:last-child, .zoom-label,
+.footer-actions a, .contact-bottom a, .lightbox-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.back-link { display: inline-flex; align-items: center; gap: 10px; }
+.project-arrow { display: flex; align-items: center; justify-content: flex-end; --icon-size: 24px; }
+.hero-bottom a { --icon-size: 22px; }
+.hero-image-caption, .zoom-label { --icon-size: 12px; }
+.image-action, .footer-actions { --icon-size: 14px; }
+.chapter-nav, .back-link, .contact-bottom, .lightbox-close { --icon-size: 16px; }
+.menu-toggle { --icon-size: 22px; }
+.circle-link, .next-project { --icon-size: 48px; }
+.contact-details { --icon-size: 28px; }
+@media (max-width: 700px) {
+  .image-action { --icon-size: 12px; }
+  .circle-link { --icon-size: 28px; }
+  .next-project { --icon-size: 32px; }
+  .contact-details { --icon-size: 24px; }
+}

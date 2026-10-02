@@ -4,16 +4,61 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const desktop = matchMedia('(min-width: 701px) and (hover: hover) and (pointer: fine)');
 let dispose = () => {};
 let sharedImage = false;
+let initializedBody: HTMLElement | undefined;
 
 function setupMotion() {
+  if (initializedBody === document.body) return;
   dispose();
+  initializedBody = document.body;
   const controller = new AbortController();
   let observer: IntersectionObserver | undefined;
+  let preloadObserver: IntersectionObserver | undefined;
   let frame = 0;
   let active: HTMLImageElement[] = [];
   let visible = new Set<HTMLImageElement>();
   let parallaxObserver: IntersectionObserver | undefined;
   const items = new Set<HTMLElement>();
+  const imageReadiness = new WeakMap<HTMLImageElement, Promise<void>>();
+  const revealing = new Set<HTMLElement>();
+  function imageReady(image: HTMLImageElement) {
+    let ready = imageReadiness.get(image);
+    if (ready) return ready;
+    ready = new Promise<void>(resolve => {
+      const finish = () => {
+        image.removeEventListener('load', finish);
+        image.removeEventListener('error', finish);
+        controller.signal.removeEventListener('abort', cancel);
+        // Decode the selected responsive source before starting its reveal.
+        // Failed requests still expose the alt text rather than hiding the frame.
+        if (image.naturalWidth && typeof image.decode === 'function') image.decode().catch(() => {}).then(resolve);
+        else resolve();
+      };
+      const cancel = () => {
+        image.removeEventListener('load', finish);
+        image.removeEventListener('error', finish);
+        resolve();
+      };
+      image.addEventListener('load', finish);
+      image.addEventListener('error', finish);
+      controller.signal.addEventListener('abort', cancel, { once: true });
+      if (image.complete) finish();
+    });
+    imageReadiness.set(image, ready);
+    return ready;
+  }
+  function reveal(element: HTMLElement) {
+    if (revealing.has(element) || element.classList.contains('is-visible')) return;
+    revealing.add(element);
+    const images = [...element.querySelectorAll<HTMLImageElement>('picture img')];
+    images.forEach(image => { image.loading = 'eager'; });
+    Promise.all(images.map(imageReady)).then(() => {
+      if (controller.signal.aborted) return;
+      // Keep the hidden and revealed states in different paints, including cache hits.
+      requestAnimationFrame(() => {
+        if (!controller.signal.aborted) element.classList.add('is-visible');
+      });
+    });
+  }
   const mark = (selector: string, kind = 'text', delay = 0) => {
     document.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
       if (element.closest('dialog')) return;
@@ -57,16 +102,26 @@ function setupMotion() {
   }
   function startReveals() {
     if (reduced.matches || !('IntersectionObserver' in window)) { revealAll(); return; }
+    preloadObserver = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        (entry.target as HTMLImageElement).loading = 'eager';
+        preloadObserver!.unobserve(entry.target);
+      }
+    }, { rootMargin: '800px 0px' });
+    document.querySelectorAll<HTMLImageElement>('main picture img').forEach(image => preloadObserver!.observe(image));
     observer = new IntersectionObserver(entries => {
       for (const entry of entries) if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
+        reveal(entry.target as HTMLElement);
         observer!.unobserve(entry.target);
       }
-    }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px 120px 0px' });
     items.forEach(element => {
       if (element.classList.contains('is-visible')) return;
       // Visible content must never disappear after its first paint or restored navigation.
-      if (element.getBoundingClientRect().top < innerHeight) element.classList.add('is-visible');
+      const inViewport = element.getBoundingClientRect().top < innerHeight;
+      const images = [...element.querySelectorAll<HTMLImageElement>('picture img')];
+      if (inViewport && images.every(image => image.complete && image.naturalWidth > 0)) element.classList.add('is-visible');
+      else if (inViewport) reveal(element);
       else observer!.observe(element);
     });
     document.documentElement.classList.add('motion-ready');
@@ -116,7 +171,7 @@ function setupMotion() {
   window.addEventListener('resize', scheduleParallax, { passive: true, signal: controller.signal });
   document.addEventListener('visibilitychange', scheduleParallax, { signal: controller.signal });
   startReveals(); startParallax();
-  dispose = () => { controller.abort(); observer?.disconnect(); stopParallax(); };
+  dispose = () => { controller.abort(); observer?.disconnect(); preloadObserver?.disconnect(); stopParallax(); };
 }
 
 // Use the selected image for continuity even when the same project also appears
@@ -142,3 +197,7 @@ document.addEventListener('astro:page-load', () => {
   document.querySelectorAll<HTMLImageElement>('img').forEach(image => image.style.removeProperty('view-transition-name'));
   setupMotion();
 });
+// Astro fires its first page-load on window.load, after eager images finish.
+// Prepare the reveal states as soon as the markup is available instead.
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupMotion, { once: true });
+else setupMotion();

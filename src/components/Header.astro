@@ -1,11 +1,12 @@
 ---
+import Icon from './Icon.astro';
 import { translator, pathFor, localeFrom, localizedPath } from '../i18n';
 const t = translator(Astro.url);
 const path = pathFor(Astro.url);
 
 const links = [{ href:'/projets/', label:'Projets' },{ href:'/a-propos/', label:'À propos' },{ href:'/contact/', label:'Contact' }];
 ---
-<header class="header shell"><a class="wordmark" href={path("/")} aria-label={t("Emma Expert, accueil")}>{t("Emma Expert")}<span>{t("DESIGN D’ESPACE")}</span></a><span class="header-note">{t("ARCHITECTURE INTÉRIEURE")}<br/>{t("SCÉNOGRAPHIE")}</span><button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">{t("Menu")} <span aria-hidden="true">+</span></button><nav id="main-nav" aria-label={t("Navigation principale")}>{links.map(link => <a href={path(link.href)} aria-current={Astro.url.pathname.startsWith(path(link.href)) ? 'page' : undefined}>{t(link.label)}<span aria-hidden="true">↗</span></a>)}</nav><div class="language-switch" role="group" aria-label={localeFrom(Astro.url) === "en" ? "Language" : "Langue"}>{(["en", "fr"] as const).map(locale => <a href={localizedPath(Astro.url.pathname, locale)} lang={locale} hreflang={locale} aria-label={locale === "en" ? "English" : "Français"} aria-current={locale === localeFrom(Astro.url) ? "true" : undefined}>{locale.toUpperCase()}</a>)}</div></header>
+<header class="header shell"><a class="wordmark" href={path("/")} aria-label={t("Emma Expert, accueil")}>{t("Emma Expert")}<span>{t("DESIGN D’ESPACE")}</span></a><span class="header-note">{t("ARCHITECTURE INTÉRIEURE")}<br/>{t("SCÉNOGRAPHIE")}</span><button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">{t("Menu")} <span aria-hidden="true"><Icon name="plus"/></span></button><nav id="main-nav" aria-label={t("Navigation principale")}>{links.map(link => <a href={path(link.href)} aria-current={Astro.url.pathname.startsWith(path(link.href)) ? 'page' : undefined}>{t(link.label)}<span aria-hidden="true"><Icon name="up-right"/></span></a>)}</nav><div class="language-switch" role="group" aria-label={localeFrom(Astro.url) === "en" ? "Language" : "Langue"}>{(["en", "fr"] as const).map(locale => <a href={localizedPath(Astro.url.pathname, locale)} lang={locale} hreflang={locale} aria-label={locale === "en" ? "English" : "Français"} aria-current={locale === localeFrom(Astro.url) ? "true" : undefined}>{locale.toUpperCase()}</a>)}</div></header>
 <script>
 let controller = new AbortController();
 function setupMenu() {

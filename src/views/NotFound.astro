@@ -1,7 +1,8 @@
 ---
+import Icon from '../components/Icon.astro';
 import { translator, pathFor } from '../i18n';
 const t = translator(Astro.url);
 const path = pathFor(Astro.url);
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title={t("Page introuvable - Emma Expert")}><section class="page-heading shell"><span class="eyebrow">404</span><h1>{t("Un espace")}<br/><em>{t("à retrouver.")}</em></h1><p>{t("Cette page n’existe pas.")}</p><a class="text-link" href={path("/")}>{t("Revenir à l’accueil ↗")}</a></section></BaseLayout>
+<BaseLayout title={t("Page introuvable - Emma Expert")} structuredData={false}><section class="page-heading shell"><span class="eyebrow">404</span><h1>{t("Un espace")}<br/><em>{t("à retrouver.")}</em></h1><p>{t("Cette page n’existe pas.")}</p><a class="text-link" href={path("/")}>{t("Revenir à l’accueil")} <Icon name="up-right"/></a></section></BaseLayout>

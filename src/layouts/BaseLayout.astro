@@ -13,6 +13,7 @@ import '@fontsource/cormorant-garamond/latin-400-italic.css';
 import '@fontsource/dm-sans/latin-400.css';
 import '@fontsource/dm-sans/latin-500.css';
 import '../styles/global.css';
-const { title, description, project } = Astro.props;
+import '../styles/icons.css';
+const { title, description, project, projects, structuredData } = Astro.props;
 ---
-<!doctype html><html lang={localeFrom(Astro.url)}><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#faf9f6"/><link rel="icon" href={path("/favicon.svg")} type="image/svg+xml"/><SEO title={title} description={description} project={project}/><ClientRouter/></head><body id="top"><a href="#main" class="skip-link">{t("Aller au contenu")}</a><Header/><main id="main"><slot/></main><Footer/><MotionPlayback/><Motion/></body></html>
+<!doctype html><html lang={localeFrom(Astro.url)}><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#faf9f6"/><link rel="icon" href={path("/favicon.svg")} type="image/svg+xml"/><SEO title={title} description={description} project={project} projects={projects} structuredData={structuredData}/><ClientRouter/></head><body id="top"><a href="#main" class="skip-link">{t("Aller au contenu")}</a><Header/><main id="main"><slot/></main><Footer/><MotionPlayback/><Motion/></body></html>

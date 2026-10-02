@@ -1,16 +1,26 @@
 ---
+import { Schema } from '@unschema-graph/astro';
+import { buildPortfolioSchema, type PortfolioSchemaInput } from '../data/structured-data';
 import { translator, localeFrom, localizedPath } from '../i18n';
+interface Props {
+  title?: string;
+  description?: string;
+  project?: PortfolioSchemaInput['project'];
+  projects?: PortfolioSchemaInput['projects'];
+  structuredData?: boolean;
+}
 const t = translator(Astro.url);
-const { title = 'Emma Expert - Design d’espace & architecture intérieure', description = 'Portfolio d’Emma Expert : architecture intérieure, design d’espace, scénographie et dessins. Découvrez ses projets et son parcours entre Nice et Paris.', project } = Astro.props;
+const { title = 'Emma Expert - Design d’espace & architecture intérieure', description = 'Portfolio d’Emma Expert : architecture intérieure, design d’espace, scénographie et dessins. Découvrez ses projets et son parcours entre Nice et Paris.', project, projects, structuredData = true } = Astro.props;
 const localizedTitle = t(title);
 const localizedDescription = t(description);
 const locale = localeFrom(Astro.url);
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
-const image = Astro.site ? new URL('/og-image.jpg', Astro.site).href : undefined;
-const schema = project ? { '@context':'https://schema.org', '@type':'CreativeWork', name:project.title, description:project.description, creator:{ '@type':'Person', name:'Emma Expert' }, ...(canonical ? {url:canonical} : {}) } : { '@context':'https://schema.org', '@type':'Person', name:'Emma Expert', jobTitle:t('Designer d’espace'), sameAs:['https://www.linkedin.com/in/emma-expert-758432247/'], address:{ '@type':'PostalAddress',addressLocality:'Paris',addressCountry:'FR' }, ...(Astro.site ? {url:Astro.site.href} : {}) };
+const image = Astro.site ? new URL('/og-portfolio-emma.jpg', Astro.site).href : undefined;
+const imageAlt = t('Emma Expert - portfolio d’architecture intérieure, intérieur en bois et dessin architectural.');
+const schema = structuredData && Astro.site ? buildPortfolioSchema({ url: Astro.url, site: Astro.site, title: localizedTitle, description: localizedDescription, project, projects }) : undefined;
 ---
 <title>{localizedTitle}</title><meta name="description" content={localizedDescription}/>{canonical && <link rel="canonical" href={canonical}/>}
 {Astro.site && <>{(["en", "fr"] as const).map(language => <link rel="alternate" hreflang={language} href={new URL(localizedPath(Astro.url.pathname, language), Astro.site).href}/>)}<link rel="alternate" hreflang="x-default" href={new URL(localizedPath(Astro.url.pathname, "en"), Astro.site).href}/></>}
-<meta property="og:title" content={localizedTitle}/><meta property="og:description" content={localizedDescription}/><meta property="og:type" content="website"/><meta property="og:locale" content={locale === "en" ? "en_GB" : "fr_FR"}/>{canonical && <meta property="og:url" content={canonical}/>}{image && <meta property="og:image" content={image}/>}
-<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={localizedTitle}/><meta name="twitter:description" content={localizedDescription}/>{image && <meta name="twitter:image" content={image}/>}
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<meta property="og:title" content={localizedTitle}/><meta property="og:description" content={localizedDescription}/><meta property="og:type" content="website"/><meta property="og:site_name" content="Emma Expert"/><meta property="og:locale" content={locale === "en" ? "en_GB" : "fr_FR"}/><meta property="og:locale:alternate" content={locale === "en" ? "fr_FR" : "en_GB"}/>{canonical && <meta property="og:url" content={canonical}/>}{image && <><meta property="og:image" content={image}/><meta property="og:image:type" content="image/jpeg"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:alt" content={imageAlt}/></>}
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={localizedTitle}/><meta name="twitter:description" content={localizedDescription}/>{image && <><meta name="twitter:image" content={image}/><meta name="twitter:image:alt" content={imageAlt}/></>}
+{schema && <Schema item={schema} inLanguage={locale} />}

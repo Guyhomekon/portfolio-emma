@@ -6,10 +6,29 @@ const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH 
 const errors = [];
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
 page.on('pageerror', e => errors.push(e.message));
+async function verifyIcons() {
+  const result = await page.evaluate(() => {
+    const text = document.body.textContent.replace(/[©®™]/g, '');
+    const icons = [...document.querySelectorAll('svg.inline-icon')];
+    return {
+      textGlyphs: /[←↑→↓↔↕↖↗↘↙\p{Extended_Pictographic}\uFE0F]/u.test(text),
+      invalid: icons.filter(icon => {
+        const bounds = icon.getBoundingClientRect();
+        return icon.getAttribute('aria-hidden') !== 'true' || icon.getAttribute('viewBox') !== '0 0 24 24' ||
+          !icon.querySelector('path') || (bounds.width > 0 && (bounds.width < 12 || bounds.width > 48 || Math.abs(bounds.width - bounds.height) > 1));
+      }).length,
+      count: icons.length,
+    };
+  });
+  assert.equal(result.textGlyphs, false, 'Site text must contain no emoji or character arrows');
+  assert.equal(result.invalid, 0, 'SVG icons must have consistent dimensions and decorative semantics');
+  assert.ok(result.count > 0);
+}
 try {
   await page.goto(base);
   assert.equal(await page.locator('html').getAttribute('lang'), 'en');
-  assert.equal(await page.locator('#main-nav a').first().textContent(), 'Projects↗');
+  assert.equal(await page.locator('#main-nav a').first().textContent(), 'Projects');
+  await verifyIcons();
   for (const slug of await readdir('dist/projects')) {
     if (slug === 'index.html') continue;
     for (const locale of ['en', 'fr']) {
@@ -20,6 +39,7 @@ try {
       assert.equal(await page.locator('.language-switch a[lang="en"]').getAttribute('href'), `/projects/${slug}/`);
       assert.equal(await page.locator('.language-switch a[lang="fr"]').getAttribute('href'), `/fr/projets/${slug}/`);
       assert.equal(await page.locator('.back-link').getAttribute('href'), locale === 'en' ? '/projects/' : '/fr/projets/');
+      await verifyIcons();
     }
   }
   await page.goto(base + '/projects/habitat-de-a-a-z/');
@@ -47,13 +67,17 @@ try {
     await page.setViewportSize({ width, height: 844 });
     await page.goto(base);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+    await verifyIcons();
     await page.locator('.language-switch a[lang="fr"]').click();
     await page.waitForURL('**/fr/');
     await page.locator('.menu-toggle').click();
     await page.locator('#main-nav a').first().click();
     await page.waitForURL('**/fr/projets/');
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+    await verifyIcons();
+    await page.locator('.project-caption').first().screenshot({ path: `/tmp/emma-icons-project-${width}.png` });
+    await page.locator('.contact-line').screenshot({ path: `/tmp/emma-icons-contact-${width}.png` });
   }
   assert.deepEqual(errors, []);
-  console.log('PASS: 18 project routes, translations, language switching, gallery, localized navigation, LinkedIn, downloads and mobile widths 320/390.');
+  console.log('PASS: 18 project routes, translations, language switching, gallery, localized navigation, LinkedIn, downloads, decorative SVG icons without emoji and mobile widths 320/390.');
 } finally { await browser.close(); }

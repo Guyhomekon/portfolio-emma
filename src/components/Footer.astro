@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import { translator, pathFor } from '../i18n';
 const t = translator(Astro.url);
 const path = pathFor(Astro.url);
@@ -10,9 +11,9 @@ const path = pathFor(Astro.url);
   </div>
   <rootage-badge label="Created by" theme="light" shape="square" href="https://embed.rtge.fr/"></rootage-badge>
   <div class="footer-actions">
-    <a href={path("/portfolio-emma-expert-2026.pdf")} download>{t("Portfolio PDF")} <span aria-hidden="true">↓</span></a>
+    <a href={path("/portfolio-emma-expert-2026.pdf")} download>{t("Portfolio PDF")} <span aria-hidden="true"><Icon name="down"/></span></a>
     <span>© 2026</span>
-    <a href="#top">{t("Retour en haut ↑")}</a>
+    <a href="#top">{t("Retour en haut")} <Icon name="up"/></a>
   </div>
 </footer>
 <script is:inline src="https://embed.rtge.fr/badge/v1/rtge-badge.min.js" defer></script>

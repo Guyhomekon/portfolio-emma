@@ -1,0 +1,13 @@
+{
+  "tool": "imagegen",
+  "date": "2026-10-02",
+  "asset": "public/og-portfolio-emma.jpg",
+  "width": 1200,
+  "height": 630,
+  "references": [
+    "src/assets/p6-0.png",
+    "src/assets/p31-0.png",
+    "homepage screenshot"
+  ],
+  "prompt": "Use case: compositing\nAsset type: website Open Graph social sharing cover, a finished flat bitmap, wide landscape 1.905:1 aspect ratio, ideally 2400 by 1260.\nPrimary request: Adapt the provided Emma Expert architecture portfolio website into a striking, immediately understandable link preview image. Use reference 1 for its refined editorial identity, reference 2 as the main interior project photograph, and reference 3 as a small architectural drawing accent. This is a graphic cover, not a screenshot or device mockup.\nComposition: warm ivory background, generous margins, left 42% with clear large elegant serif lettering and right 58% dominated by the actual warm wood interior from reference 2. A restrained crop of the real black-and-white drawing from reference 3 can sit in the lower left under the title, with plenty of breathing room. Very fine terracotta architectural guide lines, precise grid, editorial magazine quality. Strong legibility at thumbnail size. Color palette ivory #faf9f6, near-black #252823, muted terracotta #ae6050.\nText (verbatim): \"Emma Expert\" large serif on two lines; \"INTERIOR ARCHITECTURE\" prominent below; \"SPATIAL DESIGN · SCENOGRAPHY\" as a smaller secondary line; \"PORTFOLIO\" and \"NICE / PARIS\" as small corner labels.\nConstraints: Preserve the real interior's arched window, warm timber partitions, round pendant lamp, green ottoman and furniture. Preserve the drawing's existing building shape. Do not invent new project imagery. No navigation, buttons, browser chrome, logos, phone number, job search, additional copy or watermark. Keep all important text away from edges and make the interior unmistakably architectural. Produce the finished cover only."
+}

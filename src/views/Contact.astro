@@ -1,7 +1,8 @@
 ---
+import Icon from '../components/Icon.astro';
 import { translator, pathFor } from '../i18n';
 const t = translator(Astro.url);
 const path = pathFor(Astro.url);
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title={t("Contact - Emma Expert")}><section class="contact-page shell"><span class="eyebrow">{t("CONTACT · NICE / PARIS, FRANCE")}</span><h1>{t("Une rencontre,")}<br/><em>{t("un nouveau regard.")}</em></h1><p>{t("Pour échanger autour d’un projet,")}<br/>{t("retrouvez-moi sur LinkedIn.")}</p><div class="contact-details"><a href="https://www.linkedin.com/in/emma-expert-758432247/"><span class="eyebrow">{t("LINKEDIN")}</span><span>{t("Contacter Emma Expert")}</span><span>↗</span></a></div><div class="contact-notes"><div><span class="eyebrow">{t("RETROUVEZ-MOI")}</span><p>{t("emma.expert")}<br/>{t("emmartdesign")}</p></div><a class="text-link" href={path("/portfolio-emma-expert-2026.pdf")} download>{t("Télécharger le portfolio ↓")}</a></div></section></BaseLayout>
+<BaseLayout title={t("Contact - Emma Expert")} description={`${t("Pour échanger autour d’un projet,")} ${t("retrouvez-moi sur LinkedIn.")}`}><section class="contact-page shell"><span class="eyebrow">{t("CONTACT · NICE / PARIS, FRANCE")}</span><h1>{t("Une rencontre,")}<br/><em>{t("un nouveau regard.")}</em></h1><p>{t("Pour échanger autour d’un projet,")}<br/>{t("retrouvez-moi sur LinkedIn.")}</p><div class="contact-details"><a href="https://www.linkedin.com/in/emma-expert-758432247/"><span class="eyebrow">{t("LINKEDIN")}</span><span>{t("Contacter Emma Expert")}</span><span><Icon name="up-right"/></span></a></div><div class="contact-notes"><div><span class="eyebrow">{t("RETROUVEZ-MOI")}</span><p>{t("emma.expert")}<br/>{t("emmartdesign")}</p></div><a class="text-link" href={path("/portfolio-emma-expert-2026.pdf")} download>{t("Télécharger le portfolio")} <Icon name="down"/></a></div></section></BaseLayout>

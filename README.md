@@ -29,7 +29,9 @@ Le PDF situe le stage BPA en **2024**. Les dates des projets académiques ne son
 
 Choisir une compilation `npm run build` et le dossier de sortie `dist`. Aucun backend ni adaptateur n’est nécessaire.
 
-Définir `PUBLIC_SITE_URL` avec l’URL publique réelle du site dans les variables d’environnement du déploiement. Cette variable active les URLs canoniques, les liens OpenGraph et la génération du sitemap. Le fichier `robots.txt` référence alors `sitemap-index.xml`. Sans domaine confirmé, le site reste utilisable et aucun domaine fictif n’est publié.
+Le domaine public confirmé est `https://emma-expert.guyhomekon.fr/`, configuré par défaut dans `astro.config.mjs`. `PUBLIC_SITE_URL` permet de le remplacer dans les variables d’environnement du déploiement. Les URLs canoniques, les liens Open Graph et le sitemap utilisent ce domaine. Le fichier `robots.txt` référence `sitemap-index.xml`.
+
+L’image de partage est `public/og-portfolio-emma.jpg` (1200 × 630), créée avec imagegen à partir du site, de l’intérieur Habitat et du dessin de la basilique. `SEO.astro` la déclare pour Open Graph et les cartes Twitter avec ses dimensions, son type et une description dans la langue de la page. Son nom de fichier distinct permet aux nouveaux aperçus de demander le nouvel asset. Les plateformes peuvent conserver leurs anciens aperçus en cache après le déploiement.
 
 ## Vérification navigateur
 
@@ -40,6 +42,14 @@ node scripts/verify.mjs
 Ce script utilise Chrome installé sur macOS, ou le binaire indiqué par `CHROME_PATH`. Il teste navigation, routes projets, menu mobile, galeries, absence de débordements et erreurs JavaScript. Définir `TEST_URL` si le serveur utilise une adresse différente de `http://localhost:4321`.
 
 Les objectifs Lighthouse du brief doivent être mesurés sur la version de production ; ils ne sont pas des scores garantis.
+
+## Données structurées
+
+`@unschema-graph/astro` 0.10.0 est intégré suivant le [guide d’implémentation](https://unschema-graph.jhdx.dev/fr/ai/implementation-guide.md) et le [démarrage rapide Astro](https://unschema-graph.jhdx.dev/fr/getting-started/quick-start/astro.md). `src/data/structured-data.ts` construit les entités validées ; `SEO.astro` rend un unique `<Schema />` dans le head, à la compilation, sans JavaScript client ajouté.
+
+Chaque page de contenu relie `Person` (Emma) et `WebSite` à sa page. Les pages projets incluent leur `CreativeWork`, À propos utilise `ProfilePage`, le contact `ContactPage` et le sommaire `CollectionPage` avec une `ItemList` des neuf projets visibles. Le catalogue officiel de cette version ne propose pas de builder `CreativeWork` : `PortfolioWork` utilise l’API documentée `defineSchema()` et Zod, avec une relation `creator` validée par `PersonSchema`. Les propriétés de page non encore modélisées (`mainEntity`, `about`, `isPartOf` de `ProfilePage`) passent par `withAdditionalProperties()` après validation. Les identifiants d’Emma, du site et des créations restent stables entre EN et FR ; les pages et descriptions sont localisées. Les pages 404 ne produisent pas de graphe de contenu.
+
+Le graphe décrit les informations présentes sur le site, sans téléphone, email ni dates de publication inventées. La validation lève une erreur en développement comme à la compilation. `npm run build` exécute automatiquement l’audit officiel en mode strict via `postbuild` ; `npm run audit:schema` permet de le relancer. `npm run verify:schema` vérifie les 26 pages, les références, les identifiants et les listes localisées. Les sources documentaires Markdown servent de référence de développement et ne sont pas publiées comme contenu du portfolio.
 
 ## Références de conception
 
@@ -59,7 +69,7 @@ L’anglais est la langue par défaut (`/`, `/projects/`, `/about/`, `/contact/`
 
 Les vues communes sont dans `src/views/`. Les traductions anglaises sont dans `src/i18n/en.json`, avec le texte français comme clé ; les contenus sources restent en français. Ajouter une traduction lors de toute modification de texte ou de projet. Les images et le PDF original sont partagés entre les langues et gardent leurs annotations françaises.
 
-Définir `PUBLIC_SITE_URL` à la véritable URL du site pour générer les liens canoniques, les alternatives `hreflang` et le sitemap. Les copies de pages portant le suffixe « 2 » sont conservées dans `archive/duplicate-pages/`, hors du routage ; les copies de données sont exclues du chargement.
+Les liens canoniques, les alternatives `hreflang` et le sitemap utilisent le domaine public configuré, avec possibilité de remplacement via `PUBLIC_SITE_URL`. Les copies de pages portant le suffixe « 2 » sont conservées dans `archive/duplicate-pages/`, hors du routage ; les copies de données sont exclues du chargement.
 
 Validation des langues : lancer le serveur preview sur le port 4324, puis `node scripts/verify-i18n.mjs`.
 
@@ -72,3 +82,5 @@ Les effets sont désactivés avec la préférence de réduction des animations ;
 Le skill personnalisé `higgsfield-editorial-motion` est installé dans les skills Codex de l’utilisateur. Il ne connecte pas automatiquement Higgsfield ; le plugin nécessite sa propre installation et la connexion au compte. Les animations du site sont natives et fonctionnent sans ce service.
 
 La première vidéo Higgsfield est `public/motion/habitat-dolly.mp4` (Hailuo 2.3 Fast, environ 6 s, 1080 × 1328). `src/scripts/video-motion.ts` assure le chargement visible, la pause hors écran, la préférence de réduction des animations et le contrôle de lecture. Le clip joue une fois et garde sa dernière image ; le bouton permet de le rejouer. Le contenu dans le viewport n’est plus caché à l’initialisation des révélations. Vérification : `node scripts/verify-video-motion.mjs`.
+
+Les révélations des images attendent le chargement et le décodage de leur source responsive. Les images proches sont préparées 800 px avant leur entrée dans le viewport ; les masques interpolent entre deux rectangles `inset()` pour éviter une ouverture brusque. Une image déjà affichée reste visible lors des retours de navigation et ne rejoue pas son apparition au scroll. Vérification en réseau retardé, sur desktop et mobile, en anglais et français : `node scripts/verify-image-reveals.mjs`.
