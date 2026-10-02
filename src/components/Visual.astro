@@ -1,0 +1,20 @@
+---
+import { Picture } from 'astro:assets';
+import motion from '../data/motion.json';
+import type { ImageMetadata } from 'astro';
+interface Props { file: string; alt: string; eager?: boolean; class?: string; transitionName?: string; sizes?: string; }
+const { file, alt, eager = false, class: className, transitionName, sizes = '(max-width: 700px) 100vw, 75vw' } = Astro.props;
+const clip = (motion as Record<string, { src: string }>)[file];
+const images = import.meta.glob<{ default: ImageMetadata }>('../assets/*', { eager: true });
+const source = images[`../assets/${file}`]?.default;
+if (!source) throw new Error(`Image introuvable : ${file}`);
+const widths = [...new Set([400, 800, 1200, 1600, 1920, 2560, 3200, source.width].filter(w => w <= source.width))].sort((a, b) => a - b);
+---
+{clip ? <div class="animated-visual"><Picture src={source} alt={alt} formats={['webp']} quality={90} fallbackFormat="webp" widths={widths} sizes={sizes} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} class={className} transition:name={transitionName} /><video data-motion-video data-src={clip.src} muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video></div> : <Picture src={source} alt={alt} formats={['webp']} quality={90} fallbackFormat="webp" widths={widths} sizes={sizes} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} class={className} transition:name={transitionName} />}
+<style>
+  .animated-visual { position: relative; overflow: hidden; }
+  .animated-visual picture { display: block; }
+  .animated-visual video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 400ms ease; pointer-events: none; }
+  .animated-visual[data-video-ready] video { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .animated-visual video { display: none; } }
+</style>

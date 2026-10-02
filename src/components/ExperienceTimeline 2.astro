@@ -1,0 +1,5 @@
+---
+import { experiences } from '../data/profile';
+const { full = false } = Astro.props;
+---
+<div class="timeline">{experiences.slice(0,full ? undefined : 4).map(item => <article><span class="experience-year">{item.year}</span><div><h3>{item.title}</h3><span class="eyebrow">{item.role}</span></div><p>{item.description}</p></article>)}</div>

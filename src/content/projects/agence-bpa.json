@@ -1,0 +1,31 @@
+{
+  "title": "Agence BPA",
+  "number": "07",
+  "category": "En stage",
+  "type": "Plans & suivi de chantier",
+  "location": "Nice, France",
+  "heroImage": "page-36.jpg",
+  "shortDescription": "La précision du dessin, la réalité du chantier.",
+  "description": "Un stage de sept semaines à l’agence BPA à Nice, en 2024. Réalisation de plans, calcul des surfaces de revêtements et des murs à construire ou démolir, et suivi de chantiers.",
+  "problematic": "",
+  "concept": "Les travaux présentés concernent notamment l’Hôtel Acanthé et le sixième étage du Negresco. Les plans de démolition ont été tracés sur AutoCAD sous la supervision du maître de stage et selon les directives de l’architecte.",
+  "materials": [
+    "AutoCAD",
+    "Plans techniques",
+    "Relevés"
+  ],
+  "featured": false,
+  "gallery": [
+    {
+      "title": "Hôtel Acanthé - plans",
+      "image": "page-36.jpg",
+      "page": 36
+    },
+    {
+      "title": "Le Negresco - suivi de chantier",
+      "image": "page-37.jpg",
+      "page": 37
+    }
+  ],
+  "year": "2024"
+}

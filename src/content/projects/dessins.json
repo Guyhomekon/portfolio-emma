@@ -1,0 +1,43 @@
+{
+  "title": "Dessins",
+  "number": "06",
+  "category": "Travaux complémentaires",
+  "type": "Dessin & recherche plastique",
+  "location": "",
+  "heroImage": "p31-0.png",
+  "shortDescription": "Observer. Comprendre. Dessiner.",
+  "description": "Un carnet de recherches où l’observation architecturale rencontre le dessin d’objet, le portrait et l’anatomie. Le trait est un outil d’analyse autant qu’une forme d’expression.",
+  "problematic": "",
+  "concept": "Du feutre fin noir au crayon, du fusain au stylo-bille et à l’aquarelle, ces études explorent volumes, proportions, textures et lumière.",
+  "materials": [
+    "Feutre fin",
+    "Crayon",
+    "Fusain",
+    "Stylo-bille",
+    "Aquarelle"
+  ],
+  "featured": false,
+  "gallery": [
+    {
+      "title": "Études architecturales",
+      "image": "page-31.jpg",
+      "page": 31
+    },
+    {
+      "title": "Croquis d’architecture",
+      "image": "page-32.jpg",
+      "page": 32
+    },
+    {
+      "title": "Objets & portraits",
+      "image": "page-33.jpg",
+      "page": 33
+    },
+    {
+      "title": "Études anatomiques",
+      "image": "page-34.jpg",
+      "page": 34
+    }
+  ],
+  "year": ""
+}

@@ -1,0 +1,8 @@
+---
+const { cover = false } = Astro.props;
+---
+<svg class:list={['architectural-guides', { 'cover-guides': cover }]} viewBox="0 0 1000 700" fill="none" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+  <path pathLength="1" d="M24 110V24H190 M810 24H976V110 M976 590V676H810 M190 676H24V590"/>
+  <path pathLength="1" d="M0 140H55 M28 112V168 M945 560H1000 M972 532V588"/>
+  {cover && <><path pathLength="1" d="M24 215H976 M655 24V676"/><path pathLength="1" d="M650 110H760V190H865V290H976"/></>}
+</svg>

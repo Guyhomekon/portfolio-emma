@@ -1,0 +1,6 @@
+---
+import { translator } from '../i18n';
+const t = translator(Astro.url);
+const { number, title, note = '' } = Astro.props;
+---
+<div class="section-heading"><span class="chapter-number">{number}</span><h2>{t(title)}</h2><span class="eyebrow">{t(note)}</span></div>

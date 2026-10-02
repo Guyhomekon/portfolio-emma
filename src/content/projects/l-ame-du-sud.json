@@ -1,0 +1,53 @@
+{
+  "title": "L’Âme du Sud",
+  "number": "02",
+  "category": "Projets académiques",
+  "type": "Architecture intérieure",
+  "location": "Grasse, France",
+  "heroImage": "p13-0.png",
+  "shortDescription": "Une école, au rythme du Sud.",
+  "description": "Réinventer le rez-de-chaussée de l’École du Parfum de Grasse pour offrir aux étudiants un lieu convivial, modulable et durable. Un projet qui conjugue identité méditerranéenne et qualité d’usage.",
+  "problematic": "Comment retranscrire l’âme du Sud au cœur de l’École du Parfum à Grasse ?",
+  "concept": "Le jaune rappelle le soleil et l’identité de l’école. Les matières brutes et les fleurs séchées évoquent le savoir-faire grassois. Une paroi mobile ouvre la salle de classe sur les espaces communs. Le mobilier « Corolle » se compose de tables en forme de pétales, autonomes ou réunies en une fleur.",
+  "materials": [
+    "Bois",
+    "Béton ciré",
+    "Faïence",
+    "Fleurs séchées",
+    "Panneaux biodégradables"
+  ],
+  "featured": true,
+  "gallery": [
+    {
+      "title": "Analyse du site",
+      "image": "page-14.jpg",
+      "page": 14
+    },
+    {
+      "title": "Matières & axonométrie",
+      "image": "page-15.jpg",
+      "page": 15
+    },
+    {
+      "title": "Perspective intérieure",
+      "image": "page-16.jpg",
+      "page": 16
+    },
+    {
+      "title": "Plans & concept Corolle",
+      "image": "page-17.jpg",
+      "page": 17
+    },
+    {
+      "title": "Coupes & paroi modulable",
+      "image": "page-18.jpg",
+      "page": 18
+    },
+    {
+      "title": "Perspectives à l’aquarelle",
+      "image": "page-19.jpg",
+      "page": 19
+    }
+  ],
+  "year": ""
+}

@@ -1,0 +1,59 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import { readdir } from 'node:fs/promises';
+const base = process.env.TEST_URL || 'http://localhost:4324';
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: true });
+const errors = [];
+const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+page.on('pageerror', e => errors.push(e.message));
+try {
+  await page.goto(base);
+  assert.equal(await page.locator('html').getAttribute('lang'), 'en');
+  assert.equal(await page.locator('#main-nav a').first().textContent(), 'Projects↗');
+  for (const slug of await readdir('dist/projects')) {
+    if (slug === 'index.html') continue;
+    for (const locale of ['en', 'fr']) {
+      const url = locale === 'en' ? `/projects/${slug}/` : `/fr/projets/${slug}/`;
+      const response = await page.goto(base + url);
+      assert.equal(response.status(), 200);
+      assert.equal(await page.locator('html').getAttribute('lang'), locale);
+      assert.equal(await page.locator('.language-switch a[lang="en"]').getAttribute('href'), `/projects/${slug}/`);
+      assert.equal(await page.locator('.language-switch a[lang="fr"]').getAttribute('href'), `/fr/projets/${slug}/`);
+      assert.equal(await page.locator('.back-link').getAttribute('href'), locale === 'en' ? '/projects/' : '/fr/projets/');
+    }
+  }
+  await page.goto(base + '/projects/habitat-de-a-a-z/');
+  assert.equal(await page.locator('h1').textContent(), 'Habitat from A to Z');
+  await page.locator('.language-switch a[lang="fr"]').click();
+  await page.waitForURL('**/fr/projets/habitat-de-a-a-z/');
+  assert.equal(await page.locator('h1').textContent(), 'Habitat de A à Z');
+  await page.locator('.language-switch a[lang="en"]').click();
+  await page.waitForURL('**/projects/habitat-de-a-a-z/');
+  await page.locator('[data-gallery-open]').first().click();
+  assert.equal(await page.locator('dialog').evaluate(el => el.open), true);
+  await page.keyboard.press('Escape');
+  await page.locator('.back-link').click();
+  await page.waitForURL('**/projects/');
+  assert.equal(await page.locator('.project-preview').count(), 9);
+  for (const locale of ['en', 'fr']) {
+    const prefix = locale === 'fr' ? '/fr' : '';
+    await page.goto(base + prefix + '/contact/');
+    assert.equal(await page.locator('.contact-details a').getAttribute('href'), 'https://www.linkedin.com/in/emma-expert-758432247/');
+    assert.equal(await page.locator('a[download]').first().getAttribute('href'), '/portfolio-emma-expert-2026.pdf');
+    await page.goto(base + (locale === 'fr' ? '/fr/a-propos/' : '/about/'));
+    assert.equal(await page.locator('html').getAttribute('lang'), locale);
+  }
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto(base);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+    await page.locator('.language-switch a[lang="fr"]').click();
+    await page.waitForURL('**/fr/');
+    await page.locator('.menu-toggle').click();
+    await page.locator('#main-nav a').first().click();
+    await page.waitForURL('**/fr/projets/');
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  }
+  assert.deepEqual(errors, []);
+  console.log('PASS: 18 project routes, translations, language switching, gallery, localized navigation, LinkedIn, downloads and mobile widths 320/390.');
+} finally { await browser.close(); }

@@ -1,0 +1,7 @@
+---
+import { translator } from '../i18n';
+const t = translator(Astro.url);
+import { experiences } from '../data/profile';
+const { full = false } = Astro.props;
+---
+<div class="timeline">{experiences.slice(0,full ? undefined : 4).map(item => <article><span class="experience-year">{item.year}</span><div><h3>{t(item.title)}</h3><span class="eyebrow">{t(item.role)}</span></div><p>{t(item.description)}</p></article>)}</div>

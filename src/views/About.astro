@@ -1,0 +1,12 @@
+---
+import { translator, pathFor } from '../i18n';
+const t = translator(Astro.url);
+const path = pathFor(Astro.url);
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Visual from '../components/Visual.astro';
+import ExperienceTimeline from '../components/ExperienceTimeline.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { introduction, tools } from '../data/profile';
+---
+<BaseLayout title={t("À propos - Emma Expert")}><section class="page-heading shell"><span class="eyebrow">{t("EMMA EXPERT · NICE / PARIS, FRANCE")}</span><h1>{t("Imaginer.")}<br/><em>{t("Donner forme.")}</em></h1></section><section class="about-preview shell about-full"><div class="portrait"><Visual file="p3-20.png" alt={t("Portrait d’Emma Expert")} eager/></div><div class="about-preview-text"><h2>{t("Designer d’espace,")}<br/><em>{t("par sensibilité.")}</em></h2><p>{t(introduction)}</p><p>{t("J’ai depuis longtemps un intérêt pour la capacité à donner à chaque espace une fonction juste et à améliorer l’expérience de chacun.")}</p><a href={path("/portfolio-emma-expert-2026.pdf")} download class="text-link">{t("Mon portfolio ↓")}</a></div></section><section class="shell experience" id="parcours"><SectionHeading number="01" title={t("Le parcours")} note={t("EXPÉRIENCES")}/><ExperienceTimeline full/></section><section class="shell qualifications"><SectionHeading number="02" title={t("Apprendre & pratiquer")} note={t("FORMATION ET OUTILS")}/><div class="qualifications-grid"><div><span class="eyebrow">{t("FORMATION")}</span><article><span>2022 - 2025</span><h3>{t("École de Condé Nice")}</h3><p>{t("Bachelor en architecture intérieure et scénographie de luxe.")}<br/>{t("Diplômée et admise en mastère.")}</p></article><article><span>2021 - 2022</span><h3>{t("Lycée Honoré d’Estienne d’Orves")}</h3><p>{t("Baccalauréat · Arts plastiques, mathématiques et SES.")}<br/>{t("Nice, France.")}</p></article></div><div><span class="eyebrow">{t("OUTILS & PRATIQUES")}</span><ul class="tools-list">{tools.map(tool=><li>{t(tool)}</li>)}</ul><div class="languages"><span class="eyebrow">{t("LANGUES")}</span><p>{t("Français · langue maternelle")}<br/>{t("Anglais · B2")}</p></div></div></div><div class="interests"><span class="eyebrow">{t("EN DEHORS DU STUDIO")}</span><p>{t("Théâtre · Cinéma · Architecture · Scénographie · Bateau à voile · Danse")}</p></div></section><ContactCTA/></BaseLayout>

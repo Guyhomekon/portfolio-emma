@@ -1,0 +1,18 @@
+{
+  "source": "src/assets/p6-0.png",
+  "media_id": "2998b932-39b4-4071-a344-4a3b34f98f9a",
+  "job_id": "e777144f-ddca-471b-b9b8-338a34e5b878",
+  "provider": "Higgsfield",
+  "model": "minimax_hailuo",
+  "variant": "minimax-2.3-fast",
+  "requested_duration": 6,
+  "actual_duration": 5.875,
+  "resolution": [
+    1080,
+    1328
+  ],
+  "audio_tracks": 0,
+  "quoted_credits": 7,
+  "file": "public/motion/habitat-dolly.mp4",
+  "status": "completed"
+}

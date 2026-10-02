@@ -1,0 +1,34 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+const base = process.env.TEST_URL || 'http://localhost:4321';
+const browser = await chromium.launch({executablePath:process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+const page = await browser.newPage({ viewport:{width:1440,height:1000} });
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+async function capture(name) { await page.evaluate(async()=>{ for(let y=0;y<document.body.scrollHeight;y+=600){ window.scrollTo(0,y); await new Promise(r=>setTimeout(r,100)); } window.scrollTo(0,0); await document.fonts.ready; await Promise.race([Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,10000))]); }); await page.waitForTimeout(800); await page.screenshot({path:`/tmp/emma-${name}.png`,fullPage:true}); await page.screenshot({path:`/tmp/emma-${name}-top.png`}); }
+console.log('Loading homepage'); await page.goto(base+'/',{waitUntil:'networkidle',timeout:30000});
+await capture('desktop');
+assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+await page.locator('#main-nav').getByRole('link',{name:'Projets',exact:false}).click();
+await page.waitForURL('**/projets/'); await page.waitForTimeout(600);
+await page.getByRole('link',{name:'Découvrir Habitat de A à Z',exact:true}).click();
+await page.waitForURL('**/projets/habitat-de-a-a-z/'); await page.waitForTimeout(600);
+await page.getByRole('button',{name:'Agrandir : Analyse du site',exact:true}).click();
+await page.waitForFunction(()=>document.querySelector('dialog')?.open);
+await page.keyboard.press('Escape');
+assert.equal(await page.locator('dialog').evaluate(d=>!d.open),true);
+console.log('Desktop navigation and gallery: PASS');
+await page.setViewportSize({width:390,height:844});
+console.log('Loading homepage'); await page.goto(base+'/',{waitUntil:'networkidle',timeout:30000});
+await capture('mobile');
+assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+await page.locator('.menu-toggle').click();
+assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'),'true');
+await page.locator('#main-nav').getByRole('link',{name:'Contact',exact:false}).click();
+await page.waitForURL('**/contact/'); await page.waitForTimeout(600);
+assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+console.log('Mobile menu, contact and overflow: PASS');
+for (const path of ['/a-propos/','/projets/l-ame-du-sud/','/projets/le-souffle-du-flow/','/projets/habiter-la-scene/','/projets/les-arches-vielha/','/projets/dessins/','/projets/agence-bpa/','/projets/metropole-nice/','/projets/circuit-paul-ricard/']) { const response=await page.goto(base+path); assert.equal(response.status(),200,path); assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,path); }
+assert.deepEqual(errors,[]);
+await page.emulateMedia({reducedMotion:'reduce'});await page.goto(base+'/');assert.equal(await page.locator('h1').isVisible(),true);
+console.log('All project routes, mobile widths, reduced motion and JavaScript errors: PASS');
+await browser.close();

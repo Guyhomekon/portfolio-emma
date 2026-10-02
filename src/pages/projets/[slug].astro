@@ -1,0 +1,6 @@
+---
+import { projectPaths } from '../../i18n/project-paths';
+export const getStaticPaths = projectPaths;
+const { slug } = Astro.params;
+return Astro.redirect(`/projects/${slug}/`, 301);
+---

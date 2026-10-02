@@ -1,0 +1,31 @@
+{
+  "title": "Habiter la scène",
+  "number": "04",
+  "category": "Travaux complémentaires",
+  "type": "Scénographie",
+  "location": "Grasse, France",
+  "heroImage": "p29-0.png",
+  "shortDescription": "Entre le réel et l’inconscient.",
+  "description": "Une mise en scène onirique suit un personnage en psychanalyse. Entre les références à Freud et Jung, ses peurs et ses désirs prennent corps dans un univers où la logique s’efface.",
+  "problematic": "Explorer la frontière entre réalité et inconscient.",
+  "concept": "Deux univers se répondent : un cabinet réaliste en panneaux de bois, éclairé sobrement, et un paysage psychédélique, coloré et mouvant. Les lumières directionnelles et le plexiglas souple rendent visibles les tensions du psychisme.",
+  "materials": [
+    "Panneaux de bois",
+    "Plexiglas souple",
+    "Lumières colorées"
+  ],
+  "featured": false,
+  "gallery": [
+    {
+      "title": "Contexte & conception",
+      "image": "page-28.jpg",
+      "page": 28
+    },
+    {
+      "title": "Explorations plastiques & lumière",
+      "image": "page-29.jpg",
+      "page": 29
+    }
+  ],
+  "year": ""
+}

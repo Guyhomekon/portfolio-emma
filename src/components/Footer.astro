@@ -1,0 +1,29 @@
+---
+import { translator, pathFor } from '../i18n';
+const t = translator(Astro.url);
+const path = pathFor(Astro.url);
+---
+<footer class="shell footer">
+  <div class="footer-identity">
+    <a href={path("/")} class="footer-name">{t("Emma Expert")}</a>
+    <span>{t("Design d’espace · Nice / Paris, France")}</span>
+  </div>
+  <rootage-badge label="Created by" theme="light" shape="square" href="https://embed.rtge.fr/"></rootage-badge>
+  <div class="footer-actions">
+    <a href={path("/portfolio-emma-expert-2026.pdf")} download>{t("Portfolio PDF")} <span aria-hidden="true">↓</span></a>
+    <span>© 2026</span>
+    <a href="#top">{t("Retour en haut ↑")}</a>
+  </div>
+</footer>
+<script is:inline src="https://embed.rtge.fr/badge/v1/rtge-badge.min.js" defer></script>
+<style>
+  .footer { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 24px; }
+  .footer-identity, .footer-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .footer-actions { justify-content: flex-end; }
+  rootage-badge { justify-self: center; }
+  @media (max-width: 700px) {
+    .footer { grid-template-columns: 1fr; gap: 24px; }
+    .footer-identity, .footer-actions { justify-content: center; text-align: center; gap: 16px; }
+    .footer-identity { flex-direction: column; gap: 8px; }
+  }
+</style>

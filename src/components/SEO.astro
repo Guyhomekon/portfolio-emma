@@ -1,0 +1,16 @@
+---
+import { translator, localeFrom, localizedPath } from '../i18n';
+const t = translator(Astro.url);
+const { title = 'Emma Expert - Design d’espace & architecture intérieure', description = 'Portfolio d’Emma Expert : architecture intérieure, design d’espace, scénographie et dessins. Découvrez ses projets et son parcours entre Nice et Paris.', project } = Astro.props;
+const localizedTitle = t(title);
+const localizedDescription = t(description);
+const locale = localeFrom(Astro.url);
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const image = Astro.site ? new URL('/og-image.jpg', Astro.site).href : undefined;
+const schema = project ? { '@context':'https://schema.org', '@type':'CreativeWork', name:project.title, description:project.description, creator:{ '@type':'Person', name:'Emma Expert' }, ...(canonical ? {url:canonical} : {}) } : { '@context':'https://schema.org', '@type':'Person', name:'Emma Expert', jobTitle:t('Designer d’espace'), sameAs:['https://www.linkedin.com/in/emma-expert-758432247/'], address:{ '@type':'PostalAddress',addressLocality:'Paris',addressCountry:'FR' }, ...(Astro.site ? {url:Astro.site.href} : {}) };
+---
+<title>{localizedTitle}</title><meta name="description" content={localizedDescription}/>{canonical && <link rel="canonical" href={canonical}/>}
+{Astro.site && <>{(["en", "fr"] as const).map(language => <link rel="alternate" hreflang={language} href={new URL(localizedPath(Astro.url.pathname, language), Astro.site).href}/>)}<link rel="alternate" hreflang="x-default" href={new URL(localizedPath(Astro.url.pathname, "en"), Astro.site).href}/></>}
+<meta property="og:title" content={localizedTitle}/><meta property="og:description" content={localizedDescription}/><meta property="og:type" content="website"/><meta property="og:locale" content={locale === "en" ? "en_GB" : "fr_FR"}/>{canonical && <meta property="og:url" content={canonical}/>}{image && <meta property="og:image" content={image}/>}
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={localizedTitle}/><meta name="twitter:description" content={localizedDescription}/>{image && <meta name="twitter:image" content={image}/>}
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

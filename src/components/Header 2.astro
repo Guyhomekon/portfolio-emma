@@ -1,0 +1,10 @@
+---
+const path = Astro.url.pathname;
+const links = [{ href:'/projets/', label:'Projets' },{ href:'/a-propos/', label:'À propos' },{ href:'/contact/', label:'Contact' }];
+---
+<header class="header shell"><a class="wordmark" href="/" aria-label="Emma Expert, accueil">Emma Expert<span>DESIGN D’ESPACE</span></a><span class="header-note">ARCHITECTURE INTÉRIEURE<br/>SCÉNOGRAPHIE</span><button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">Menu <span aria-hidden="true">+</span></button><nav id="main-nav" aria-label="Navigation principale">{links.map(link => <a href={link.href} aria-current={path.startsWith(link.href) ? 'page' : undefined}>{link.label}<span aria-hidden="true">↗</span></a>)}</nav></header>
+<script>
+function setupMenu() { const button = document.querySelector<HTMLButtonElement>('.menu-toggle'); const nav = document.querySelector<HTMLElement>('#main-nav'); if (!button || !nav) return; function close() { button!.setAttribute('aria-expanded','false'); nav!.classList.remove('open'); } button.addEventListener('click', () => { const open = button.getAttribute('aria-expanded') !== 'true'; button.setAttribute('aria-expanded',String(open)); nav.classList.toggle('open',open); }); document.addEventListener('keydown', e => { if (e.key === 'Escape') { close(); button.focus(); } },{ signal: controller.signal }); }
+let controller = new AbortController();
+document.addEventListener('astro:page-load', () => { controller.abort(); controller = new AbortController(); setupMenu(); });
+</script>

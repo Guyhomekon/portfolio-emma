@@ -1,0 +1,10 @@
+---
+const { title = 'Emma Expert — Design d’espace & architecture intérieure', description = 'Portfolio d’Emma Expert : architecture intérieure, design d’espace, scénographie et dessins. Découvrez ses projets et son parcours à Nice.', project } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const image = Astro.site ? new URL('/og-image.jpg', Astro.site).href : undefined;
+const schema = project ? { '@context':'https://schema.org', '@type':'CreativeWork', name:project.title, description:project.description, creator:{ '@type':'Person', name:'Emma Expert' }, ...(canonical ? {url:canonical} : {}) } : { '@context':'https://schema.org', '@type':'Person', name:'Emma Expert', jobTitle:'Designer d’espace', email:'emma.expert674@gmail.com', address:{ '@type':'PostalAddress',addressLocality:'Nice',addressCountry:'FR' }, ...(Astro.site ? {url:Astro.site.href} : {}) };
+---
+<title>{title}</title><meta name="description" content={description}/>{canonical && <link rel="canonical" href={canonical}/>}
+<meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/><meta property="og:locale" content="fr_FR"/>{canonical && <meta property="og:url" content={canonical}/>}{image && <meta property="og:image" content={image}/>}
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={title}/><meta name="twitter:description" content={description}/>{image && <meta name="twitter:image" content={image}/>}
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

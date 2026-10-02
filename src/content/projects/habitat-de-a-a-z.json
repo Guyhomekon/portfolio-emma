@@ -1,0 +1,53 @@
+{
+  "title": "Habitat de A à Z",
+  "number": "01",
+  "category": "Projets académiques",
+  "type": "Architecture intérieure",
+  "location": "Drap, France",
+  "heroImage": "p6-0.png",
+  "shortDescription": "Réhabiliter une grange. Révéler la lumière.",
+  "description": "Réhabiliter une grange abandonnée en un lieu de vie où travailler et résider. La lumière et la fluidité guident la transformation, sans effacer l’histoire du bâtiment.",
+  "problematic": "Comment apporter lumière et fluidité dans un espace ancien sombre ?",
+  "concept": "L’esprit Mid-Century Modern associe chaleur organique et lignes contemporaines. Au rez-de-chaussée, les espaces de vie s’organisent autour d’une mezzanine centrale ; à l’étage, les murs en pierre existants préservent l’âme de la grange.",
+  "materials": [
+    "Béton brut",
+    "Bois",
+    "Pierre existante",
+    "Carrelage",
+    "Tissus"
+  ],
+  "featured": true,
+  "gallery": [
+    {
+      "title": "Analyse du site",
+      "image": "page-7.jpg",
+      "page": 7
+    },
+    {
+      "title": "Recherches & axonométrie",
+      "image": "page-8.jpg",
+      "page": 8
+    },
+    {
+      "title": "Perspective intérieure",
+      "image": "page-9.jpg",
+      "page": 9
+    },
+    {
+      "title": "Plans & élévation",
+      "image": "page-10.jpg",
+      "page": 10
+    },
+    {
+      "title": "Coupes & détails techniques",
+      "image": "page-11.jpg",
+      "page": 11
+    },
+    {
+      "title": "Perspectives à l’aquarelle",
+      "image": "page-12.jpg",
+      "page": 12
+    }
+  ],
+  "year": ""
+}

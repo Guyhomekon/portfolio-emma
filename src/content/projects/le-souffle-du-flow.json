@@ -1,0 +1,54 @@
+{
+  "title": "Le Souffle du Flow",
+  "number": "03",
+  "category": "Projets académiques",
+  "type": "Design d’espace",
+  "location": "Nice, France",
+  "heroImage": "p20-0.png",
+  "shortDescription": "Un refuge pour laisser naître les idées.",
+  "description": "Le projet « Le Nid » propose un espace refuge aux étudiants venant de terminer leur Master. Il accompagne la préparation du projet de fin d’études et l’insertion professionnelle, en faisant de l’espace un facilitateur de concentration et de créativité.",
+  "problematic": "Comment l’espace peut-il devenir un déclencheur de l’état de flow ?",
+  "concept": "Bureaux isolés, coworking, galerie d’exposition, cuisine partagée, deux Fablabs et jardin composent un lieu de travail sensoriel. Les verts mousse et les tons terre dialoguent avec les matières naturelles. La relation entre béton, bois, lumière et silence fait écho au travail de Tadao Ando.",
+  "materials": [
+    "Bois brut",
+    "Liège",
+    "Béton poncé",
+    "Chanvre",
+    "Tissus doux",
+    "Pierre naturelle"
+  ],
+  "featured": true,
+  "gallery": [
+    {
+      "title": "Analyse du site",
+      "image": "page-21.jpg",
+      "page": 21
+    },
+    {
+      "title": "Programme, matières & jardin",
+      "image": "page-22.jpg",
+      "page": 22
+    },
+    {
+      "title": "L’escalier central",
+      "image": "page-23.jpg",
+      "page": 23
+    },
+    {
+      "title": "Plans RDC & R+1",
+      "image": "page-24.jpg",
+      "page": 24
+    },
+    {
+      "title": "Coupes",
+      "image": "page-25.jpg",
+      "page": 25
+    },
+    {
+      "title": "Fablabs & détails",
+      "image": "page-26.jpg",
+      "page": 26
+    }
+  ],
+  "year": ""
+}

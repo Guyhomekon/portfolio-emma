@@ -1,0 +1,36 @@
+---
+import { translator, pathFor, localeFrom, localizedPath } from '../i18n';
+const t = translator(Astro.url);
+const path = pathFor(Astro.url);
+
+const links = [{ href:'/projets/', label:'Projets' },{ href:'/a-propos/', label:'À propos' },{ href:'/contact/', label:'Contact' }];
+---
+<header class="header shell"><a class="wordmark" href={path("/")} aria-label={t("Emma Expert, accueil")}>{t("Emma Expert")}<span>{t("DESIGN D’ESPACE")}</span></a><span class="header-note">{t("ARCHITECTURE INTÉRIEURE")}<br/>{t("SCÉNOGRAPHIE")}</span><button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">{t("Menu")} <span aria-hidden="true">+</span></button><nav id="main-nav" aria-label={t("Navigation principale")}>{links.map(link => <a href={path(link.href)} aria-current={Astro.url.pathname.startsWith(path(link.href)) ? 'page' : undefined}>{t(link.label)}<span aria-hidden="true">↗</span></a>)}</nav><div class="language-switch" role="group" aria-label={localeFrom(Astro.url) === "en" ? "Language" : "Langue"}>{(["en", "fr"] as const).map(locale => <a href={localizedPath(Astro.url.pathname, locale)} lang={locale} hreflang={locale} aria-label={locale === "en" ? "English" : "Français"} aria-current={locale === localeFrom(Astro.url) ? "true" : undefined}>{locale.toUpperCase()}</a>)}</div></header>
+<script>
+let controller = new AbortController();
+function setupMenu() {
+  controller.abort();
+  controller = new AbortController();
+  document.querySelectorAll<HTMLAnchorElement>('.language-switch a').forEach(link => {
+    link.addEventListener('click', () => {
+      const destination = new URL(link.href);
+      destination.hash = location.hash;
+      link.href = destination.href;
+    }, { signal: controller.signal });
+  });
+  const button = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#main-nav');
+  if (!button || !nav) return;
+  const close = () => { button.setAttribute('aria-expanded', 'false'); nav.classList.remove('open'); };
+  button.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open)); nav.classList.toggle('open', open);
+  }, { signal: controller.signal });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') { close(); button.focus(); }
+  }, { signal: controller.signal });
+  matchMedia('(min-width: 701px)').addEventListener('change', close, { signal: controller.signal });
+}
+document.addEventListener('astro:before-swap', () => controller.abort());
+document.addEventListener('astro:page-load', setupMenu);
+</script>

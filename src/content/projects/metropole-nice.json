@@ -1,0 +1,26 @@
+{
+  "title": "Métropole Nice Côte d’Azur",
+  "number": "08",
+  "category": "En stage",
+  "type": "Agencement",
+  "location": "Nice, France",
+  "heroImage": "p38-0.png",
+  "shortDescription": "Concevoir dans un cadre collectif.",
+  "description": "Un stage au service agencement de la Métropole Nice Côte d’Azur en 2025. La mission porte sur la rénovation d’une salle de réunion et le contrôle du mobilier livré.",
+  "problematic": "",
+  "concept": "Réalisation du plan d’une salle de réunion et des plans électriques associés. Une approche attentive aux contraintes réglementaires et aux besoins des services de la collectivité.",
+  "materials": [
+    "Plans",
+    "Agencement",
+    "Mobilier"
+  ],
+  "featured": false,
+  "gallery": [
+    {
+      "title": "Salle de réunion - plans & perspectives",
+      "image": "page-38.jpg",
+      "page": 38
+    }
+  ],
+  "year": "2025"
+}

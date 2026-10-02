@@ -1,0 +1,11 @@
+---
+import { translator, pathFor, translateData } from '../i18n';
+const t = translator(Astro.url);
+const path = pathFor(Astro.url);
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Visual from '../components/Visual.astro';
+import ProjectGallery from '../components/ProjectGallery.astro';
+
+const { project, next } = Astro.props; const p = translateData(project.data, Astro.url);
+---
+<BaseLayout title={`${p.title} - Emma Expert`} description={p.description} project={p}><article class="project-detail shell"><a href={path("/projets/")} class="back-link">{t("← Tous les projets")}</a><header class="project-title"><span class="chapter-number">{p.number}</span><div><span class="eyebrow">{p.category}</span><h1>{p.title}</h1><p>{p.shortDescription}</p></div></header><dl class="project-meta"><div><dt>{t("DISCIPLINE")}</dt><dd>{p.type}</dd></div>{p.location && <div><dt>{t("LIEU")}</dt><dd>{p.location}</dd></div>}{p.year && <div><dt>{t("ANNÉE")}</dt><dd>{p.year}</dd></div>}<div><dt>{t("CONCEPTION")}</dt><dd>{t("Emma Expert")}</dd></div></dl><div class="detail-hero"><Visual file={p.heroImage} alt={`${p.title} - ${p.shortDescription}`} eager transitionName={`project-${project.id}`} sizes="90vw"/></div><section class="project-story"><span class="eyebrow">{t("L’INTENTION")}</span><div><h2>{p.shortDescription}</h2><p>{p.description}</p></div></section>{p.problematic && <blockquote class="problematic">« {p.problematic} »</blockquote>}<section class="project-concept"><div><span class="eyebrow">{t("LE CONCEPT")}</span><p>{p.concept}</p></div><div><span class="eyebrow">{t("MATIÈRES & OUTILS")}</span><ul>{p.materials.map((m:string)=><li>{m}</li>)}</ul></div></section><ProjectGallery gallery={p.gallery} title={p.title}/><a href={path("/portfolio-emma-expert-2026.pdf")} class="text-link" download>{t("Télécharger le portfolio original ↓")}</a><a class="next-project" href={path(`/projets/${next.id}/`)}><span class="eyebrow">{t("PROJET SUIVANT")}</span><span>{t(next.data.title)}</span><span aria-hidden="true">↗</span></a></article></BaseLayout>
